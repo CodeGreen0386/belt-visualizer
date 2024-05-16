@@ -19,4 +19,17 @@ function utils.check_entity(data, unit_number, lane, path, sides)
     end
 end
 
+---@param player LuaPlayer
+function utils.get_cursor_item_prototype_name(player)
+    if player.is_cursor_empty() then
+        return
+    end
+    if player.cursor_stack.valid_for_read and player.cursor_stack.name then
+        return player.cursor_stack.name
+    end
+    if player.cursor_ghost and player.cursor_ghost.valid then
+        return player.cursor_ghost.name
+    end
+end
+
 return utils
