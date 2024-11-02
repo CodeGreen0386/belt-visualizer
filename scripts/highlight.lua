@@ -284,19 +284,27 @@ highlight_entity["lane-splitter"] = function(data, entity, lanes, path)
     local belt_neighbours = entity.belt_neighbours
     local input = belt_neighbours.inputs[1]
     local output = belt_neighbours.outputs[1]
-    local next_lanes, lane_offsets = get_output_lanes(data, entity, lanes, output)
-    for lane in pairs(lanes) do
-        local offsets = lane_splitter[lane][direction]
-        local lane_offset = lane_offsets[lane]
-        draw.line(data, entity, offsets.input, offsets[lane_offset])
+    local prev_lanes= path==1 and lanes or {true,true}
+    local next_lanes= path==2 and lanes or {true,true}
+    local _, lane_offsets = get_output_lanes(data, entity, next_lanes, output)
+    draw.line(data, entity, lane_splitter[1][direction].middle, lane_splitter[2][direction].middle)
+    for lane,display in pairs(prev_lanes) do
+        if display then 
+            local offsets = lane_splitter[lane][direction]
+            draw.line(data, entity, offsets.input, offsets.input_middle)
+        end
+    end
+    for lane,display in pairs(next_lanes) do
+        if display then 
+            local offsets = lane_splitter[lane][direction]
+            local lane_offset = lane_offsets[lane]
+            draw.line(data, entity, offsets.output_middle, offsets[lane_offset])
+        end
     end
     if path == 1 then
         add_to_queue(data, output, next_lanes, 1, entity)
     else
-        if input then
-            local prev_lanes = get_prev_lanes(entity, lanes, input)
-            if prev_lanes then add_to_queue(data, input, prev_lanes, 2, entity) end
-        end
+        add_to_queue(data, input, prev_lanes, 2, entity)
     end
 end
 

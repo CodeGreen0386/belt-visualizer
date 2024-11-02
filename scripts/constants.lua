@@ -156,6 +156,9 @@ local splitter = splitter_offsets{
 local lane_splitter = offsets{
     input = -0.5,
     output = 0.5,
+    middle = 0,
+    input_middle = 0.05,
+    output_middle = -0.05,
     sideload = sideload,
 }
 
