@@ -18,15 +18,15 @@ local connectables = {
 }
 
 local lane_cycle = {
-    {true, true},
-    {[1] = true},
-    {[2] = true},
+    {true, true} --[[@as {[1]: true, [2]: true}]],
+    {[1] = true} --[[@as {[1]: true}]],
+    {[2] = true} --[[@as {[2]: true}]],
 }
 
 local side_cycle = {
-    both = {left = true, right = true},
-    left = {left = true},
-    right = {right = true},
+    both = {left = true, right = true} --[[@as {left: true, right: true}]],
+    left = {left = true} --[[@as {left: true}]],
+    right = {right = true} --[[@as {right: true}]],
 }
 
 local function empty_offsets(splitter)

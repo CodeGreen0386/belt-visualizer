@@ -1,4 +1,4 @@
-local const = require("scripts/constants")
+local const = require("scripts/constants") ---@module "belt-visualizer/scripts/constants"
 local color = const.color
 local width = const.width
 local dash_length = const.dash_length
@@ -6,8 +6,13 @@ local gap_length = const.gap_length
 local curved = const.curved
 local arc_radius = const.arc_radius
 local radius = const.radius
+
 local draw = {}
 
+---@param data BeltVisualizer.Data
+---@param entity LuaEntity
+---@param from_offset Vector
+---@param to_offset Vector
 function draw.line(data, entity, from_offset, to_offset)
     local drawn = data.drawn_offsets[entity.unit_number]
     if not drawn then
@@ -28,6 +33,10 @@ function draw.line(data, entity, from_offset, to_offset)
     data.render[render.id] = render
 end
 
+---@param data BeltVisualizer.Data
+---@param entity LuaEntity
+---@param from_offset Vector
+---@param to_offset Vector
 function draw.dash(data, entity, from_offset, to_offset)
     local render = rendering.draw_line{
         color = color,
@@ -42,6 +51,10 @@ function draw.dash(data, entity, from_offset, to_offset)
     data.render[render.id] = render
 end
 
+---@param data BeltVisualizer.Data
+---@param entity LuaEntity
+---@param lane 1|2
+---@param clockwise boolean
 function draw.arc(data, entity, lane, clockwise)
     local drawn = data.drawn_arcs[entity.unit_number]
     if not drawn then
@@ -66,6 +79,9 @@ function draw.arc(data, entity, lane, clockwise)
     data.render[render.id] = render
 end
 
+---@param data BeltVisualizer.Data
+---@param entity LuaEntity
+---@param offset Vector
 function draw.circle(data, entity, offset)
     local render = rendering.draw_circle{
         color = color,
@@ -78,6 +94,9 @@ function draw.circle(data, entity, offset)
     data.render[render.id] = render
 end
 
+---@param data BeltVisualizer.Data
+---@param entity LuaEntity
+---@param offsets BoundingBox
 function draw.rectangle(data, entity, offsets)
     local render = rendering.draw_rectangle{
         color = color,

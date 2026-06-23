@@ -13,7 +13,7 @@ data:extend{{
 }, {
     type = "custom-input",
     name = "bv-toggle-hover",
-    key_sequence = "",
+    key_sequence = "CONTROL + G",
     action = "lua",
     order = "c",
 }, {
@@ -27,21 +27,4 @@ data:extend{{
     icon_size = 32,
     small_icon = "__belt-visualizer__/graphics/toggle-hover-x24.png",
     small_icon_size = 24,
-    -- icon = {
-    --     filename = "__belt-visualizer__/graphics/toggle-hover-x32.png",
-    --     size = 32,
-    --     -- scale = 0.5,
-    -- },
-    -- small_icon =
-    -- {
-    --   filename = "__belt-visualizer__/graphics/toggle-hover-x24.png",
-    --   size = 24,
-    -- --   scale = 0.5,
-    -- },
-    -- disabled_small_icon =
-    -- {
-    --   filename = "__belt-visualizer__/graphics/toggle-hover-x24-white.png",
-    --   size = 24,
-    -- --   scale = 0.5,
-    -- }
 }}

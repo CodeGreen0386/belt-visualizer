@@ -1,6 +1,6 @@
-local const = require("scripts/constants")
-local utils = require("scripts/utils")
-local draw = require("scripts/rendering")
+local const = require("scripts/constants") ---@module "belt-visualizer/scripts/constants"
+local utils = require("scripts/utils") ---@module "belt-visualizer/scripts/utils"
+local draw = require("scripts/rendering") ---@module "belt-visualizer/scripts/rendering"
 local get_belt_type = utils.get_belt_type
 local empty_check = utils.empty_check
 local check_entity = utils.check_entity
@@ -15,10 +15,14 @@ local loader = const.loader
 local loader_1x1 = const.loader_1x1
 local linked_belt = const.linked_belt
 
+---@param entity LuaEntity
+---@param output LuaEntity
 local function is_clockwise(entity, output)
     return (output.direction - entity.direction) % 16 == 4
 end
 
+---@param entity LuaEntity
+---@param belt LuaEntity
 local function get_splitter_sides(entity, belt)
     local direction = entity.direction
     local position = entity.position
@@ -28,6 +32,8 @@ local function get_splitter_sides(entity, belt)
     return (position[axis] > belt_position[axis]) ~= (direction >= 8) and side_cycle.left or side_cycle.right
 end
 
+---@param data BeltVisualizer.Data
+---@param entity LuaEntity
 local function get_filter_side(data, entity)
     if not data.filter then return end
     local splitter_filter = entity.splitter_filter
@@ -160,6 +166,7 @@ local function add_to_queue(data, entity, lanes, path, old_entity)
     end
 end
 
+---@type table<string, fun(data: BeltVisualizer.Data, entity: LuaEntity, lanes: {[1]: 1?, [2]: 2?}, path: 1|2)>
 local highlight_entity = {}
 
 highlight_entity["transport-belt"] = function(data, entity, lanes, path)
@@ -211,8 +218,8 @@ highlight_entity["underground-belt"] = function(data, entity, lanes, path)
             if prev_lanes then add_to_queue(data, input, prev_lanes, path, entity) end
         end
     end
-    local neighbour = entity.neighbours
-    if forward == is_input and neighbour then
+    local neighbour = entity.neighbours --[[@as LuaEntity?]]
+    if neighbour and forward == is_input then
         local check = data.checked[entity.unit_number]
         local neighbour_check = data.checked[neighbour.unit_number]
         for lane in pairs(lanes) do

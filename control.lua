@@ -1,6 +1,6 @@
-local const = require("scripts/constants")
-local utils = require("scripts/utils")
-local highlight_entity = require("scripts/highlight")
+local const = require("scripts/constants") ---@module "belt-visualizer/scripts/constants"
+local utils = require("scripts/utils") ---@module "belt-visualizer/scripts/utils"
+local highlight_entity = require("scripts/highlight") ---@module "belt-visualizer/scripts/highlight"
 local get_belt_type = utils.get_belt_type
 local connectables = const.connectables
 local lane_cycle = const.lane_cycle
@@ -8,11 +8,15 @@ local side_cycle = const.side_cycle
 local e = defines.events
 
 local function setup_globals()
+    ---@type table<uint, BeltVisualizer.Data
     storage.data = {}
+    ---@type table<uint, true>
     storage.in_progress = {}
+    ---@type table<uint, uint>
     storage.refresh = {}
-    storage.belt_lines = {}
+    ---@type table<table<uint, LuaRenderObject>, true>
     storage.clear = storage.clear or {}
+    ---@type table<uint, "on"|"off"|"disabled">
     storage.hover = storage.hover or {}
     -- global.colors = const.generate_colors()
 end
@@ -33,6 +37,7 @@ local function clear(index)
     if not data then return end
     data.checked = nil
     data.belt_line = nil
+    data.origin = nil
     if data.render then
         storage.clear[data.render] = true
     end
@@ -43,7 +48,6 @@ local function remove_player(event)
     local index = event.player_index
     clear(index)
     storage.data[index] = nil
-    storage.belt_lines[index] = nil
     storage.hover[index] = nil
 end
 
@@ -74,7 +78,7 @@ local function highlight(event)
     local unit_number = selected.unit_number --[[@as number]]
     local filter = utils.get_cursor_name(player)
     local repeat_origin = data.origin and data.origin.valid and data.origin.unit_number == unit_number
-    if data.filter == filter and repeat_origin then
+    if repeat_origin and data.filter == filter then
         data.cycle = data.cycle % 3 + 1
     else
         data.cycle = 1
@@ -101,7 +105,7 @@ local function highlight(event)
         end
     end
     data.render = {}
-    data.container_passthrough = settings.get_player_settings(player)["bv-container-passthrough"].value
+    data.container_passthrough = settings.get_player_settings(player)["bv-container-passthrough"].value --[[@as boolean]]
     storage.in_progress[index] = true
 end
 
@@ -124,6 +128,24 @@ local function refresh(data)
     data.render = {}
     storage.in_progress[data.index] = true
 end
+
+---@class BeltVisualizer.Data
+---@field origin LuaEntity?
+---@field filter string?
+---@field cycle uint
+---@field index uint
+---@field ghost boolean
+---@field drawn_offsets table --!
+---@field drawn_arcs table --!
+---@field checked table<uint, table> --!
+---@field belt_line table --!
+---@field head LuaEntity
+---@field tail LuaEntity
+---@field next_entities table --!
+---@field next_index uint
+---@field next_len uint
+---@field render table<uint, LuaRenderObject>
+---@field container_passthrough boolean
 
 local function keybind(event)
     local index = event.player_index
