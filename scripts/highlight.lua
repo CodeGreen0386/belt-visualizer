@@ -218,7 +218,7 @@ highlight_entity["underground-belt"] = function(data, entity, lanes, path)
             if prev_lanes then add_to_queue(data, input, prev_lanes, path, entity) end
         end
     end
-    local neighbour = entity.neighbours --[[@as LuaEntity?]]
+    local neighbour = entity.underground_belt_neighbour --[[@as LuaEntity?]]
     if neighbour and forward == is_input then
         local check = data.checked[entity.unit_number]
         local neighbour_check = data.checked[neighbour.unit_number]

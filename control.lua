@@ -198,7 +198,7 @@ local function highlightable(data, entity)
         if checked[output.unit_number] then return true end
     end
     if entity.type == "underground-belt" then
-        local neighbour = entity.neighbours
+        local neighbour = entity.underground_belt_neighbour
         if neighbour and checked[neighbour.unit_number] then return true end
     elseif entity.type == "linked-belt" then
         local neighbour = entity.linked_belt_neighbour
@@ -234,7 +234,7 @@ script.on_event(e.on_player_rotated_entity, function(event)
     if not connectables[event.entity.type] then return end
     on_entity_modified(event)
     local entity = event.entity
-    local neighbours = entity.type == "underground-belt" and entity.neighbours or entity.type == "linked-belt" and entity.linked_belt_neighbour
+    local neighbours = entity.type == "underground-belt" and entity.underground_belt_neighbour or entity.type == "linked-belt" and entity.linked_belt_neighbour
     if neighbours then on_entity_modified{entity = neighbours, tick = event.tick} end
 end)
 
@@ -254,7 +254,7 @@ local next_switch = {
     end,
     ["underground-belt"] = function(entity)
         if entity.belt_to_ground_type == "input" then
-            return entity.neighbours
+            return entity.underground_belt_neighbour
         else
             return entity.belt_neighbours.outputs[1]
         end
@@ -275,7 +275,7 @@ local previous_switch = {
     end,
     ["underground-belt"] = function(entity)
         if entity.belt_to_ground_type == "output" then
-            return entity.neighbours
+            return entity.underground_belt_neighbour
         else
             return entity.belt_neighbours.inputs[1]
         end
