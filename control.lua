@@ -110,9 +110,10 @@ local function highlight(event)
 end
 
 local function refresh(data)
-    clear(data.index)
     local entity = data.origin
+    clear(data.index)
     if not entity.valid then return end
+    data.origin = entity
     data.next_entities = {}
     data.next_index = 1
     data.next_len = 2
