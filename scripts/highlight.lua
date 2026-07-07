@@ -218,14 +218,16 @@ highlight_entity["underground-belt"] = function(data, entity, lanes, path)
             if prev_lanes then add_to_queue(data, input, prev_lanes, path, entity) end
         end
     end
-    local neighbour = entity.underground_belt_neighbour --[[@as LuaEntity?]]
+    local neighbour = entity.underground_belt_neighbour
     if neighbour and forward == is_input then
         local check = data.checked[entity.unit_number]
         local neighbour_check = data.checked[neighbour.unit_number]
         for lane in pairs(lanes) do
             if not (neighbour_check and neighbour_check[lane].dash) then
                 local offsets = dash[lane][direction]
-                draw.dash(data, is_input and entity or neighbour, offsets.input, offsets.output)
+                local from = is_input and entity or neighbour
+                local to = is_input and neighbour or entity
+                draw.dash(data, from, to, offsets.input, offsets.output)
             end
             check[lane].dash = true
         end

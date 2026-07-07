@@ -34,18 +34,19 @@ function draw.line(data, entity, from_offset, to_offset)
 end
 
 ---@param data BeltVisualizer.Data
----@param entity LuaEntity
+---@param from LuaEntity
+---@param to LuaEntity
 ---@param from_offset Vector
 ---@param to_offset Vector
-function draw.dash(data, entity, from_offset, to_offset)
+function draw.dash(data, from, to, from_offset, to_offset)
     local render = rendering.draw_line{
         color = color,
         width = width,
-        from = {entity = entity, offset = from_offset},
-        to = {entity = entity.underground_belt_neighbour, offset = to_offset},
+        from = {entity = from, offset = from_offset},
+        to = {entity = to, offset = to_offset},
         dash_length = dash_length,
         gap_length = gap_length,
-        surface = entity.surface,
+        surface = from.surface,
         players = {data.index},
     }
     data.render[render.id] = render
