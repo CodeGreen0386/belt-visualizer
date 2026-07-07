@@ -30,14 +30,18 @@ script.on_configuration_changed(function(data)
     setup_globals()
 end)
 
-local function clear(index)
+---@param index uint
+---@param keep_origin boolean?
+local function clear(index, keep_origin)
     storage.in_progress[index] = nil
     storage.refresh[index] = nil
     local data = storage.data[index]
     if not data then return end
     data.checked = nil
     data.belt_line = nil
-    data.origin = nil
+    if not keep_origin then
+        data.origin = nil
+    end
     if data.render then
         storage.clear[data.render] = true
     end
@@ -56,7 +60,7 @@ script.on_event(e.on_player_removed, remove_player)
 
 local function highlight(event)
     local index = event.player_index
-    clear(index)
+    clear(index, true)
     local player = game.get_player(index) --[[@as LuaPlayer]]
     local selected = player.selected
     if not selected then
